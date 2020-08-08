@@ -37,7 +37,7 @@ namespace workspacer.Bar
             return parts;
         }
 
-        protected IBarWidgetPart Part(string text, Color fore = null, Color back = null, Action partClicked = null, string fontname = null, string leftPadding = "", string rightPadding = "")
+        protected IBarWidgetPart Part(string text, Color fore = null, Color back = null, Action partClicked = null, string fontname = null, string leftPadding = "", string rightPadding = "", int maxWidth = 0)
         {
             return new BarWidgetPart()
             {
@@ -47,7 +47,8 @@ namespace workspacer.Bar
                 PartClicked = partClicked,
                 FontName = fontname,
                 LeftPadding = leftPadding,
-                RightPadding = rightPadding
+                RightPadding = rightPadding,
+                MaxWidth = maxWidth,
             };
         }
     }
