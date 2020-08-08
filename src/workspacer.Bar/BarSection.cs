@@ -106,6 +106,13 @@ namespace workspacer.Bar
                 label.BackColor = System.Drawing.Color.FromArgb(0, System.Drawing.Color.Black);
             }
 
+            if (part.MaxWidth > 0)
+            {
+                label.AutoSize = false;
+                label.Width = part.MaxWidth;
+                label.Height = 50;
+            }
+
             if (part.PartClicked != null)
             {
                 _clickedHandlers[label] = part.PartClicked;

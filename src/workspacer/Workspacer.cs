@@ -106,7 +106,10 @@ namespace workspacer
                 return null;
             }
 
-            var match = _context.Plugins.AvailablePlugins.Select(p => p.Assembly).SingleOrDefault(a => a.GetName().FullName == args.Name);
+            var match = _context.Plugins.AvailablePlugins
+                .Select(p => p.Assembly)
+                .SingleOrDefault(a => a.GetName().FullName == args.Name);
+
             if (match != null)
             {
                 return Assembly.LoadFile(match.Location);
