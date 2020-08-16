@@ -112,6 +112,11 @@ namespace workspacer.Bar
                 label.Width = part.MaxWidth;
                 label.Height = 50;
             }
+            else
+            {
+                // reset this flag if it was previously one that had a max width and no longer does
+                label.AutoSize = true;
+            }
 
             if (part.PartClicked != null)
             {
