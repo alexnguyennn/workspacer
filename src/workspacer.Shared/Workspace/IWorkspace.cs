@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace workspacer
 {
@@ -66,6 +62,14 @@ namespace workspacer
         /// rotate to the next layout
         /// </summary>
         void NextLayoutEngine(); // mod-space
+
+
+        /// <summary>
+        /// rotate to layout with given name
+        /// will log warning if trying to set layout name that doesn't exist
+        /// <param name="name">name of layout engine to rotate to</param>
+        /// </summary>
+        void SetLayoutEngine(string name); // mod-space
 
         /// <summary>
         ///  reset the active layout

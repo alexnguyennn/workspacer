@@ -143,6 +143,23 @@ namespace workspacer
             DoLayout();
         }
 
+        public void SetLayoutEngine(string name)
+        {
+            const int invalidLayoutIndex = -1;
+            _layoutIndex = Enumerable
+                .Range(0, _layoutEngines.Length)
+                .Zip(_layoutEngines,
+                    (index, layoutEngine) => (layoutEngine.Name.Equals(name) ? index : invalidLayoutIndex))
+                .FirstOrDefault(index => index >= 0 && index < _layoutEngines.Length);
+
+            if (_layoutIndex == default)
+            {
+                Logger.Error($"SetLayoutEngine: Unmatched Layout name {name} was specified. Defaulted index to 0 - {_layoutEngines[0].Name}");
+            }
+
+            DoLayout();
+        }
+
         public void ResetLayout()
         {
             GetLayoutEngine().ResetPrimaryArea();
