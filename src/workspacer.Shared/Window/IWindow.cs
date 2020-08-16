@@ -10,6 +10,7 @@ namespace workspacer
 {
     public interface IWindow
     {
+
         IntPtr Handle { get; }
         string Title { get; }
         string Class { get; }
@@ -28,6 +29,7 @@ namespace workspacer
         bool IsMouseMoving { get; }
 
         void Focus();
+        void ForceFocus();
         void Hide();
         void ShowNormal();
         void ShowMaximized();

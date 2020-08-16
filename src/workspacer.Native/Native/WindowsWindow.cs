@@ -167,6 +167,13 @@ namespace workspacer
             }
         }
 
+        public void ForceFocus()
+        {
+            Logger.Debug("[{0}] :: ForceFocus", this);
+            Win32Helper.ForceForegroundWindow(_handle);
+            WindowFocused?.Invoke();
+        }
+
         public void Hide()
         {
             Logger.Trace("[{0}] :: Hide", this);
