@@ -161,7 +161,6 @@ namespace workspacer
         {
             if (!IsFocused)
             {
-                Logger.Debug("[{0}] :: Focus", this);
                 Win32Helper.ForceForegroundWindow(_handle);
                 WindowFocused?.Invoke();
             }
@@ -169,7 +168,6 @@ namespace workspacer
 
         public void Hide()
         {
-            Logger.Trace("[{0}] :: Hide", this);
             if (CanLayout)
             {
                 _didManualHide = true;
