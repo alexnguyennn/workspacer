@@ -18,7 +18,7 @@ namespace workspacer.Bar.Widgets
         /// increase offset to make space for other widgets on left/right sections
         /// TODO: check if can source widths of other widgets in section
         /// </summary>
-        public int OtherWidgetOffset { get; set; } = 80;
+        public int OtherWidgetOffset { get; set; } = 0;
 
         public override IBarWidgetPart[] GetParts()
         {
@@ -27,23 +27,9 @@ namespace workspacer.Bar.Widgets
             var multipleMonitors = Context.MonitorContainer.NumMonitors > 1;
             var color = isFocusedMonitor && multipleMonitors ? MonitorHasFocusColor : null;
 
-            if (window != null)
-            {
-                if (!IsShortTitle)
-                {
-                    return Parts(Part(window.Title, color, fontname: FontName));
-                }
-                else
-                {
-                    var shortTitle = GetShortTitle(window.Title);
-                    //return Parts(Part(shortTitle, color, fontname: FontName));
-                    return Parts(GetWindowTitles(color));
-                }
-            }
-            else
-            {
-                return Parts(Part(NoWindowMessage, color, fontname: FontName));
-            }
+            return (window != null)
+                ? Parts(GetWindowTitles(color))
+                : Parts(Part(NoWindowMessage, color, fontname: FontName));
         }
 
         public override void Initialize()
@@ -77,13 +63,15 @@ namespace workspacer.Bar.Widgets
                 .Select((window) => (window.Handle == focusedWindow?.Handle))
                 .Zip(managedWindows,
                     (isFocused, window) => Part(
-                        getTitleString(window.Title),
+                        getTitleString(IsShortTitle
+                            ? window.Title.Split("-").Last()
+                            : window.Title),
                         isFocused ? color : Color.Gray,
-                        maxWidth: getTitleMaxWidth()))
+                        maxWidth: GetTitleMaxWidth()))
                 .ToArray();
         }
 
-        private int getTitleMaxWidth()
+        private int GetTitleMaxWidth()
         {
             var focusedMonitor = Context.MonitorContainer.FocusedMonitor;
             var monitorWidth = focusedMonitor.Width;

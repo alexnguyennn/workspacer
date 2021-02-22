@@ -32,7 +32,7 @@ namespace workspacer
                     _lastFull = window;
                 }
 
-                list.Add(new WindowLocation(0, 0, spaceWidth, spaceHeight, GetDesiredState(window, true)));
+                list.Add(new WindowLocation(0, 0, spaceWidth, spaceHeight, GetDesiredState(windowList[i], true)));
             }
             return list;
         }

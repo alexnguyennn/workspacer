@@ -65,7 +65,6 @@ namespace workspacer.Bar
         private void OnLoad(object sender, EventArgs e)
         {
             this.Height = _config.BarHeight;
-            this.Width = _monitor.Width;
             // TODO: test changing height to see if we can move to bottom
             var titleBarHeight = this.ClientRectangle.Height - this.Height;
             // changes location successfully - how to move stuff around it though?
@@ -73,7 +72,6 @@ namespace workspacer.Bar
             this.Location = new Point(_monitor.X, _monitor.Y - titleBarHeight);
             _timer.Enabled = true;
 
-            this.Height = _config.BarHeight;
             this.Width = _monitor.Width;
         }
 

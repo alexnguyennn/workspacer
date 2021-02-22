@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace workspacer.Bar
 {
@@ -12,6 +9,7 @@ namespace workspacer.Bar
         private int _offset;
         private ILayoutEngine _inner;
         public string Name => _inner.Name;
+        
 
         public MenuBarLayoutEngine(ILayoutEngine inner, string title, int offset)
         {
