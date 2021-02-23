@@ -42,7 +42,7 @@ namespace workspacer
             _kbdSubs = new Dictionary<Sub, NamedBind<KeybindHandler>>();
             _mouseSubs = new Dictionary<MouseEvent, NamedBind<MouseHandler>>();
 
-            SubscribeDefaults();
+            // SubscribeDefaults();
 
             var thread = new Thread(() =>
             {
