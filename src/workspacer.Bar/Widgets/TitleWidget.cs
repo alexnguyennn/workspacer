@@ -8,7 +8,7 @@ namespace workspacer.Bar.Widgets
 {
     public class TitleWidget : BarWidgetBase
     {
-        public Color MonitorHasFocusColor { get; set; } = Color.Yellow;
+        public Color MonitorHasFocusColor { get; set; } = Color.Black;
         public bool IsShortTitle { get; set; } = false;
         public string NoWindowMessage { get; set; } = "No Windows";
 
@@ -50,7 +50,8 @@ namespace workspacer.Bar.Widgets
 
         private IBarWidgetPart[] GetWindowTitles(Color color)
         {
-            var currentWorkspace = Context.WorkspaceContainer.GetWorkspaceForMonitor(Context.Monitor);
+            var focusedMonitor = Context.Monitor;
+            var currentWorkspace = Context.WorkspaceContainer.GetWorkspaceForMonitor(focusedMonitor);
             var focusedWindow = currentWorkspace.FocusedWindow ??
                 currentWorkspace.LastFocusedWindow ??
                 currentWorkspace.ManagedWindows.FirstOrDefault();
@@ -59,29 +60,39 @@ namespace workspacer.Bar.Widgets
             // TODO: implement focus window given int
             // TODO: match on window title
             var managedWindows = currentWorkspace.ManagedWindows;
+            var nWindows = managedWindows.Count();
             return managedWindows
                 .Select((window) => (window.Handle == focusedWindow?.Handle))
                 .Zip(managedWindows,
                     (isFocused, window) => Part(
-                        getTitleString(IsShortTitle
-                            ? window.Title.Split("-").Last()
-                            : window.Title),
+                        GetTitleString(
+                                IsShortTitle
+                                    ? window.Title.Split("-").Last()
+                                    : window.Title.Trim(),
+                                ShouldTruncateAt(
+                                    window.Title.Trim().Length,
+                                    GetTitleMaxWidth(nWindows))),
                         isFocused ? color : Color.Gray,
-                        maxWidth: GetTitleMaxWidth()))
+                        isFocused ? Color.Silver : Color.Black, // TODO: make elegant, centre text
+                        maxWidth: GetTitleMaxWidth(nWindows)))
                 .ToArray();
         }
 
-        private int GetTitleMaxWidth()
+        private int GetTitleMaxWidth(int nWindows)
         {
-            var focusedMonitor = Context.MonitorContainer.FocusedMonitor;
-            var monitorWidth = focusedMonitor.Width;
-            var nWindows = Context.WorkspaceContainer.GetWorkspaceForMonitor(focusedMonitor).ManagedWindows.Count();
-            return (nWindows > 0 ? monitorWidth / nWindows : monitorWidth) - OtherWidgetOffset;
+            var barMonitor = Context.Monitor; // width always respects monitor space it is on, not focused one
+            var monitorWidth = barMonitor.Width - OtherWidgetOffset;
+            return nWindows > 0 ? monitorWidth / nWindows : monitorWidth;
         }
 
-        private string getTitleString(string windowTitle)
+        private int? ShouldTruncateAt(int titleLength, int maxWidth)
         {
-            return $"|{windowTitle}";
+            return titleLength > maxWidth ? maxWidth : null;
+        }
+
+        private string GetTitleString(string windowTitle, int? truncateCharactersAt = null)
+        {
+            return truncateCharactersAt is null ? windowTitle : windowTitle.Substring(0, truncateCharactersAt.Value);
         }
 
         private void RefreshAddRemove(IWindow window, IWorkspace workspace)
