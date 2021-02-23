@@ -110,7 +110,7 @@ namespace workspacer.Bar
             {
                 label.AutoSize = false;
                 label.Width = part.MaxWidth;
-                label.Height = 50;
+                label.Height = 30; // TODO: make this configurable too; base on part's height
             }
             else
             {
