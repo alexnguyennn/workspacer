@@ -8,7 +8,7 @@ namespace workspacer.Bar.Widgets
 {
     public class TitleWidget : BarWidgetBase
     {
-        public Color MonitorHasFocusColor { get; set; } = Color.Black;
+        public Color MonitorHasFocusColor { get; set; } = Color.Yellow;
         public bool IsShortTitle { get; set; } = false;
         public string NoWindowMessage { get; set; } = "No Windows";
 
@@ -73,7 +73,7 @@ namespace workspacer.Bar.Widgets
                                     window.Title.Trim().Length,
                                     GetTitleMaxWidth(nWindows))),
                         isFocused ? color : Color.Gray,
-                        isFocused ? Color.Silver : Color.Black, // TODO: make elegant, centre text
+                        isFocused ? Color.Teal : Color.Black, // TODO: make elegant, centre text
                         maxWidth: GetTitleMaxWidth(nWindows)))
                 .ToArray();
         }
