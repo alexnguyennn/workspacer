@@ -77,11 +77,6 @@ namespace workspacer
         void ResetLayout(); // mod-n
 
         /// <summary>
-        /// focus a specific window
-        /// </summary>
-        void FocusWindow(IWindow window);
-
-        /// <summary>
         /// focus the last focused window
         /// </summary>
         void FocusLastFocusedWindow(); 
