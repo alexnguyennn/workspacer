@@ -8,6 +8,7 @@ namespace workspacer.Bar.Widgets
 {
     public class TitleWidget : BarWidgetBase
     {
+        private static Logger Logger = Logger.Create();
         public Color MonitorHasFocusColor { get; set; } = Color.Yellow;
         public bool IsShortTitle { get; set; } = false;
         public string NoWindowMessage { get; set; } = "No Windows";
@@ -38,6 +39,11 @@ namespace workspacer.Bar.Widgets
             Context.Workspaces.WindowRemoved += RefreshAddRemove;
             Context.Workspaces.WindowUpdated += RefreshUpdated;
             Context.Workspaces.FocusedMonitorUpdated += RefreshFocusedMonitor;
+            // Context.Workspaces.WorkspaceUpdated += RefreshFocusedMonitor;
+            // Context.Workspaces.WindowMoved += (window, workspace, newWorkspace) =>
+            // {
+            //     Context.MarkDirty();
+            // };
         }
 
         private IWindow GetWindow()
@@ -50,19 +56,33 @@ namespace workspacer.Bar.Widgets
 
         private IBarWidgetPart[] GetWindowTitles(Color color)
         {
-            var focusedMonitor = Context.Monitor;
-            var currentWorkspace = Context.WorkspaceContainer.GetWorkspaceForMonitor(focusedMonitor);
+            var currentMonitor = Context.Monitor;
+            var currentWorkspace = Context.WorkspaceContainer.GetWorkspaceForMonitor(currentMonitor);
             var focusedWindow = currentWorkspace.FocusedWindow ??
                 currentWorkspace.LastFocusedWindow ??
                 currentWorkspace.ManagedWindows.FirstOrDefault();
+            var managedWindows = currentWorkspace.ManagedWindows;
+            var nWindows = managedWindows.Count();
+            var maxWidth = GetTitleMaxWidth(currentWorkspace.ManagedWindows.Count());
+            /*
+            // TODO: seems to be dpi - values calculated are seem when it works vs when it doesn't, only difference is which monitor is focused
+            Logger.Info($"Updating title widget on {currentMonitor.Index}, workspace {currentWorkspace.Name} and focused: {focusedWindow.Title}");
+            Logger.Info($"n windows: {nWindows} Calculated max width: {maxWidth}, monitor width: {Context.Monitor.Width}, offset: {OtherWidgetOffset}");
+            Logger.Info($"total width: {maxWidth*nWindows}, effective bar width: {Context.Monitor.Width - OtherWidgetOffset}, %: {((maxWidth*nWindows)/(Context.Monitor.Width-OtherWidgetOffset)) * 100}");
+            Logger.Info($"Windows are: {currentWorkspace.ManagedWindows.Aggregate("",(accum, window) => { return $"{accum},{Environment.NewLine}|{window.Title}|"; })}");
+            */
+            // TODO: focus on non-main screens happens, but action isn't right
+            // TODO: on non main screen, don't highlight background at all (even on focused one)
+            // TODO: on non main screen, make sure width scales correctly
 
             // TODO: feed callback that switches to that window from context
             // TODO: implement focus window given int
             // TODO: match on window title
-            var managedWindows = currentWorkspace.ManagedWindows;
-            var nWindows = managedWindows.Count();
             return managedWindows
-                .Select((window) => (window.Handle == focusedWindow?.Handle))
+                .Select((window) => (
+                    window.Handle == focusedWindow?.Handle
+                    && Context.MonitorContainer.FocusedMonitor == Context.Monitor
+                    ))
                 .Zip(managedWindows,
                     (isFocused, window) => Part(
                         GetTitleString(
@@ -80,8 +100,13 @@ namespace workspacer.Bar.Widgets
 
         private int GetTitleMaxWidth(int nWindows)
         {
+            // TODO: base logic on whether i'm focused monitor or not? hack, refine
+            // maybe resolutions/landscape -- make this configurable? focused offset, non-focused offset
+            // if i'm focused monitor, scale back even more (double offset)?
             var barMonitor = Context.Monitor; // width always respects monitor space it is on, not focused one
-            var monitorWidth = barMonitor.Width - OtherWidgetOffset;
+            var monitorWidth = Context.MonitorContainer.FocusedMonitor == Context.Monitor
+                ? barMonitor.Width - OtherWidgetOffset
+                : barMonitor.Width - (2 * OtherWidgetOffset);
             return nWindows > 0 ? monitorWidth / nWindows : monitorWidth;
         }
 
