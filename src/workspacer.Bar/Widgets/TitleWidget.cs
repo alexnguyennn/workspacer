@@ -94,6 +94,7 @@ namespace workspacer.Bar.Widgets
                                     GetTitleMaxWidth(nWindows))),
                         isFocused ? color : Color.Gray,
                         isFocused ? Color.Teal : Color.Black, // TODO: make elegant, centre text
+                        window.Focus,
                         maxWidth: GetTitleMaxWidth(nWindows)))
                 .ToArray();
         }
@@ -104,9 +105,7 @@ namespace workspacer.Bar.Widgets
             // maybe resolutions/landscape -- make this configurable? focused offset, non-focused offset
             // if i'm focused monitor, scale back even more (double offset)?
             var barMonitor = Context.Monitor; // width always respects monitor space it is on, not focused one
-            var monitorWidth = Context.MonitorContainer.FocusedMonitor == Context.Monitor
-                ? barMonitor.Width - OtherWidgetOffset
-                : barMonitor.Width - (2 * OtherWidgetOffset);
+            var monitorWidth = barMonitor.Width - OtherWidgetOffset;
             return nWindows > 0 ? monitorWidth / nWindows : monitorWidth;
         }
 
