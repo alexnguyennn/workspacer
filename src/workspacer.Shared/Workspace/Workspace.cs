@@ -92,7 +92,15 @@ namespace workspacer
                 {
                     var windows = ManagedWindows;
                     var next = windows.Count > 1 ? windows[(windows.IndexOf(window) + 1) % windows.Count] : null;
+                    if (windows.Any() && next is null)
+                    {
+                        next = windows.First();
+                    }
                     _lastFocused = next;
+                    if (!(_lastFocused is null))
+                    {
+                        FocusLastFocusedWindow();
+                    }
                 }
 
                 _windows.Remove(window);
