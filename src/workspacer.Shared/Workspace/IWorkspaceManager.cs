@@ -36,6 +36,35 @@ namespace workspacer
         void MoveFocusedWindowToNextMonitor();
         void MoveFocusedWindowToPreviousMonitor();
 
+        /// <summary>
+        /// on focused workspace
+        /// swap the focus and primary windows and sends updated event
+        /// </summary>
+        void SwapFocusAndPrimaryWindow(); // mod-return
+
+        /// <summary>
+        /// on focused workspace
+        /// swap the focus and next windows and sends updated event
+        /// </summary>
+        void SwapFocusAndNextWindow(); // mod-shift-j
+
+        /// <summary>
+        /// on focused workspace
+        /// swap the focus and previous windows and sends updated event
+        /// </summary>
+        void SwapFocusAndPreviousWindow(); // mod-shift-k
+
+        /// <summary>
+        /// on focused workspace
+        /// swap the specified window to a (x,y) point
+        /// in the workspace and sends updated event
+        /// </summary>
+        /// <param name="window">window to swap</param>
+        /// <param name="x">x coordinate of the point</param>
+        /// <param name="y">y coordinate of the point</param>
+        void SwapWindowToPoint(IWindow window, int x, int y);
+
+
         void ForceWorkspaceUpdate();
 
         event WorkspaceUpdatedDelegate WorkspaceUpdated;

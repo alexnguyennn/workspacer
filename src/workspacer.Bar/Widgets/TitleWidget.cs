@@ -39,11 +39,7 @@ namespace workspacer.Bar.Widgets
             Context.Workspaces.WindowRemoved += RefreshAddRemove;
             Context.Workspaces.WindowUpdated += RefreshUpdated;
             Context.Workspaces.FocusedMonitorUpdated += RefreshFocusedMonitor;
-            // Context.Workspaces.WorkspaceUpdated += RefreshFocusedMonitor;
-            // Context.Workspaces.WindowMoved += (window, workspace, newWorkspace) =>
-            // {
-            //     Context.MarkDirty();
-            // };
+            Context.Workspaces.WorkspaceUpdated += RefreshFocusedMonitor;
         }
 
         private IWindow GetWindow()
