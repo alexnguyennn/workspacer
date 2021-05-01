@@ -326,6 +326,30 @@ namespace workspacer
             }
         }
 
+        public void SwapFocusAndPrimaryWindow()
+        {
+            FocusedWorkspace.SwapFocusAndPrimaryWindow();
+            WorkspaceUpdated?.Invoke();
+        }
+
+        public void SwapFocusAndNextWindow()
+        {
+            FocusedWorkspace.SwapFocusAndNextWindow();
+            WorkspaceUpdated?.Invoke();
+        }
+
+        public void SwapFocusAndPreviousWindow()
+        {
+            FocusedWorkspace.SwapFocusAndPreviousWindow();
+            WorkspaceUpdated?.Invoke();
+        }
+
+        public void SwapWindowToPoint(IWindow window, int x, int y)
+        {
+            FocusedWorkspace.SwapWindowToPoint(window, x, y);
+            WorkspaceUpdated?.Invoke();
+        }
+
         public void MoveAllWindows(IWorkspace source, IWorkspace dest)
         {
             var toMove = source.Windows.ToList();
