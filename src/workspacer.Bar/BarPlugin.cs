@@ -34,8 +34,9 @@ namespace workspacer.Bar
 
                     var left = config.LeftWidgets();
                     var right = config.RightWidgets();
+                    var mid = config.MidWidgets();
 
-                    bar.Initialize(left, right, context);
+                    bar.Initialize(left, mid, right, context);
 
                     bar.Show();
                     bars.Add(bar);
