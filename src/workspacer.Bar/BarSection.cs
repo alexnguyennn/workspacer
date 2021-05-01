@@ -24,7 +24,8 @@ namespace workspacer.Bar
 
         private IDictionary<Label, Action> _clickedHandlers;
 
-        public BarSection(bool reverse, FlowLayoutPanel panel, IBarWidget[] widgets, IMonitor monitor, IConfigContext context, 
+        public BarSection(
+            bool reverse, FlowLayoutPanel panel, IBarWidget[] widgets, IMonitor monitor, IConfigContext context,
             Color defaultFore, Color defaultBack, string fontName, int fontSize)
         {
             _panel = panel;
@@ -62,7 +63,7 @@ namespace workspacer.Bar
 
                         if (partNumber < _panel.Controls.Count)
                         {
-                            Label label = (Label)_panel.Controls[partNumber];
+                            Label label = (Label) _panel.Controls[partNumber];
                             SetLabel(label, part);
                         }
                         else
@@ -70,6 +71,7 @@ namespace workspacer.Bar
                             var label = AddLabel();
                             SetLabel(label, part);
                         }
+
                         partNumber++;
                     }
                 }
@@ -82,6 +84,56 @@ namespace workspacer.Bar
                         toRemove.Add(_panel.Controls[i]);
                     }
                 }
+
+                toRemove.ForEach(c =>
+                {
+                    _panel.Controls.Remove(c);
+                });
+                _dirty = false;
+            }
+        }
+
+        public void DrawWithSize(int maxSize)
+        {
+            // TODO: refactor to use one draw core method
+            if (_dirty)
+            {
+                var widgets = _reverse ? _widgets.Reverse().ToArray() : _widgets;
+
+                int partNumber = 0;
+                for (var i = 0; i < widgets.Length; i++)
+                {
+                    var widget = widgets[i];
+                    var parts = widget.GetParts();
+                    var partSize = maxSize / parts.Length;
+                    for (var j = 0; j < parts.Length; j++)
+                    {
+                        var part = parts[j];
+
+                        if (partNumber < _panel.Controls.Count)
+                        {
+                            Label label = (Label) _panel.Controls[partNumber];
+                            SetLabelWithSize(label, part, partSize);
+                        }
+                        else
+                        {
+                            var label = AddLabel();
+                            SetLabelWithSize(label, part, partSize);
+                        }
+
+                        partNumber++;
+                    }
+                }
+
+                var toRemove = new List<Control>();
+                if (partNumber < _panel.Controls.Count - 1) // TODO: off by 1 error? remove?
+                {
+                    for (var i = partNumber; i < _panel.Controls.Count; i++)
+                    {
+                        toRemove.Add(_panel.Controls[i]);
+                    }
+                }
+
                 toRemove.ForEach(c => _panel.Controls.Remove(c));
                 _dirty = false;
             }
@@ -93,7 +145,8 @@ namespace workspacer.Bar
             if (part.ForegroundColor != null)
             {
                 label.ForeColor = ColorToColor(part.ForegroundColor);
-            } else
+            }
+            else
             {
                 label.ForeColor = ColorToColor(_defaultFore);
             }
@@ -101,34 +154,71 @@ namespace workspacer.Bar
             if (part.BackgroundColor != null && part.BackgroundColor != _defaultFore)
             {
                 label.BackColor = ColorToColor(part.BackgroundColor);
-            } else
+            }
+            else
             {
                 label.BackColor = System.Drawing.Color.FromArgb(0, System.Drawing.Color.Black);
             }
 
-            if (part.MaxWidth > 0)
-            {
-                label.AutoSize = false;
-                label.Width = part.MaxWidth;
-                label.Height = 30; // TODO: make this configurable too; base on part's height
-            }
-            else
-            {
-                // reset this flag if it was previously one that had a max width and no longer does
-                label.AutoSize = true;
-            }
+            label.AutoSize = true;
 
             if (part.PartClicked != null)
             {
                 _clickedHandlers[label] = part.PartClicked;
-            } else
+            }
+            else
             {
                 _clickedHandlers.Remove(label);
             }
+
             if (part.FontName != null)
             {
                 label.Font = CreateFont(part.FontName, _fontSize);
-            };
+            }
+
+            ;
+        }
+
+        private void SetLabelWithSize(Label label, IBarWidgetPart part, int maxSize)
+        {
+            label.Text = part.Text;
+            if (part.ForegroundColor != null)
+            {
+                label.ForeColor = ColorToColor(part.ForegroundColor);
+            }
+            else
+            {
+                label.ForeColor = ColorToColor(_defaultFore);
+            }
+
+            if (part.BackgroundColor != null && part.BackgroundColor != _defaultFore)
+            {
+                label.BackColor = ColorToColor(part.BackgroundColor);
+            }
+            else
+            {
+                label.BackColor = System.Drawing.Color.FromArgb(0, System.Drawing.Color.Black);
+            }
+
+            label.AutoSize = false;
+            label.Width = maxSize;
+            label.Height = 30; // TODO: make this configurable too; base on part's height
+
+            if (part.PartClicked != null)
+            {
+                _clickedHandlers[label] = part.PartClicked;
+            }
+            else
+            {
+                _clickedHandlers.Remove(label);
+            }
+
+            if (part.FontName != null)
+            {
+                label.Font = CreateFont(part.FontName, _fontSize);
+            }
+
+            ;
         }
 
         public void MarkDirty()
@@ -143,7 +233,7 @@ namespace workspacer.Bar
 
         private Font CreateFont(string name, float size)
         {
-            return new Font(name, size, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+            return new Font(name, size, FontStyle.Regular, GraphicsUnit.Point, ((byte) (0)));
         }
 
         private Label AddLabel()
