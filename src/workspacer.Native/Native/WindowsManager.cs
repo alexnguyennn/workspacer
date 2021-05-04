@@ -73,10 +73,10 @@ namespace workspacer
             thread.Start();
         }
 
-        public IWindowsDeferPosHandle DeferWindowsPos(int count)
+        public IWindowsDeferPosHandle DeferWindowsPos(int count, IEnumerable<IWindow> focusStealingWindows)
         {
             var info = Win32.BeginDeferWindowPos(count);
-            return new WindowsDeferPosHandle(info);
+            return new WindowsDeferPosHandle(info, focusStealingWindows);
         }
 
         public void DumpWindowDebugOutput()

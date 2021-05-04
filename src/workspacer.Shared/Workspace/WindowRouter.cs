@@ -13,11 +13,13 @@ namespace workspacer
         private IConfigContext _context;
         private List<Func<IWindow, bool>> _filters;
         private List<Func<IWindow, IWorkspace>> _routes;
+        private List<Func<IWindow, bool>> _focusStealFilters;
 
         public WindowRouter(IConfigContext context)
         {
             _context = context;
             _filters = new List<Func<IWindow, bool>>();
+            _focusStealFilters = new List<Func<IWindow, bool>>();
             _routes = new List<Func<IWindow, IWorkspace>>();
 
             IgnoreWindowClass("TaskManagerWindow");
@@ -53,6 +55,12 @@ namespace workspacer
             }
             return defaultWorkspace ?? _context.Workspaces.FocusedWorkspace;
         }
+
+        public IEnumerable<IWindow> GetFocusStealingWindows(IEnumerable<IWindow> windows)
+        {
+            return _focusStealFilters.SelectMany(focusStealFilter => windows.Where(focusStealFilter), (_, window) => window);
+        }
+
 
         public void ClearFilters()
         {
@@ -129,5 +137,8 @@ namespace workspacer
             var regex = new Regex(match);
             _routes.Add(window => regex.IsMatch(window.Title) ? workspace : null);
         }
+
+
+        public void MarkFocusStealingProcessName(string processName) { _focusStealFilters.Add((w) => w.ProcessName == processName); }
     }
 }

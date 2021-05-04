@@ -9,6 +9,7 @@ namespace workspacer
     public interface IWindowRouter
     {
         IWorkspace RouteWindow(IWindow window, IWorkspace defaultWorkspace = null);
+        IEnumerable<IWindow> GetFocusStealingWindows(IEnumerable<IWindow> windows);
         void ClearFilters();
         void ClearRoutes();
         void AddFilter(Func<IWindow, bool> filter);
@@ -29,5 +30,8 @@ namespace workspacer
         void RouteTitle(string title, IWorkspace workspace);
         void RouteTitleMatch(string match, string workspaceName);
         void RouteTitleMatch(string match, IWorkspace workspace);
+
+
+        void MarkFocusStealingProcessName(string processName);
     }
 }

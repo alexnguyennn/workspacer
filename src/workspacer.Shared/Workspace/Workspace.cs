@@ -408,7 +408,7 @@ namespace workspacer
                     var locations = GetLayoutEngine().CalcLayout(windows, monitor.Width, monitor.Height)
                         .ToArray();
 
-                    using (var handle = _context.Windows.DeferWindowsPos(windows.Count))
+                    using (var handle = _context.Windows.DeferWindowsPos(windows.Count, _context.WindowRouter.GetFocusStealingWindows(windows)))
                     {
                         for (var i = 0; i < locations.Length; i++)
                         {
@@ -418,7 +418,7 @@ namespace workspacer
                             var adjustedLoc = new WindowLocation(loc.X + monitor.X, loc.Y + monitor.Y,
                                 loc.Width, loc.Height, loc.State);
 
-                            if (!window.IsMouseMoving)
+                            if (!window.IsMouseMoving )
                             {
                                 handle.DeferWindowPos(window, adjustedLoc);
                             }
