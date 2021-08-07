@@ -12,7 +12,7 @@ namespace workspacer.Bar.Widgets
     {
        
 
-        public string FocusedText { get; set; } = "**********";
+        public string FocusedText { get; set; } = "***";
         public string UnfocusedText { get; set; } = "";
 
         public override IBarWidgetPart[] GetParts()
