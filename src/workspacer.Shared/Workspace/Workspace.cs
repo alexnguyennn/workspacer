@@ -427,7 +427,20 @@ namespace workspacer
                 }
                 else
                 {
-                    windows.ForEach(w => w.Hide());
+                    var focusStealers = _context.WindowRouter.GetFocusStealingWindows(windows);
+                    windows.Where(w => !focusStealers.Contains(w)).Select(w =>
+                    {
+                        w.Hide();
+                        return w;
+                    }).ToList();
+
+
+                    windows.Where(w => focusStealers.Contains(w)).Select(w =>
+                    {
+                        w.ShowMinimized();
+                        return w;
+                    }).ToList();
+                    // windows.ForEach(w => w.Hide());
                 }
             }
             else

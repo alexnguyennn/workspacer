@@ -54,7 +54,7 @@ namespace workspacer
                     ))
                 {
                     // Logger.Info($"_toNormal: focus window stealer; window prop:{JsonSerializer.Serialize(w)}");
-                    Win32.ShowWindow(w.Handle, Win32.SW.SW_SHOWMINIMIZED);
+                    Win32.ShowWindow(w.Handle, Win32.SW.SW_SHOWNOACTIVATE);
                 }
                 else
                 {
