@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace workspacer
 {
@@ -78,7 +75,7 @@ namespace workspacer
         /// <summary>
         /// quit workspacer
         /// </summary>
-        void Quit();
+        void Quit(bool shouldSaveState);
 
         /// <summary>
         /// quit workspacer, specifying an exception that occurred that neccesitates the exit
@@ -90,5 +87,6 @@ namespace workspacer
         /// restart workspacer
         /// </summary>
         void Restart();
+
     }
 }

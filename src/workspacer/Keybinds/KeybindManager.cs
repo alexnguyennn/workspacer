@@ -270,7 +270,7 @@ You can either change your custom hotkey or reassign the default hotkey";
             Subscribe(mod, Keys.T,
                 () => _context.Windows.ToggleFocusedWindowTiling(), "toggle tiling for focused window");
 
-            Subscribe(mod | KeyModifiers.LShift, Keys.Q, _context.Quit, "quit workspacer");
+            Subscribe(mod | KeyModifiers.LShift, Keys.Q, () => _context.Quit(false), "quit workspacer");
 
             Subscribe(mod, Keys.Q, _context.Restart, "restart workspacer");
 

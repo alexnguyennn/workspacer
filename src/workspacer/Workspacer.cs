@@ -63,7 +63,7 @@ namespace workspacer
             }
 
             // init workspaces
-            var state = _context.LoadState();
+            var state = _context.LoadState(shouldDelete: false);
             if (state != null)
             {
                 _context.Workspaces.InitializeWithState(state.WorkspaceState, _context.Windows.Windows);

@@ -70,7 +70,7 @@ namespace workspacer.ActionMenu
         {
             return new ActionMenuItemBuilder(this)
                 .Add("restart workspacer", () => _context.Restart())
-                .Add("quit workspacer", () => _context.Quit())
+                .Add("quit workspacer", () => _context.Quit(false))
                 .AddMenu("switch to window", () => CreateSwitchToWindowMenu(_context));
         }
 

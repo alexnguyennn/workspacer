@@ -168,8 +168,12 @@ namespace workspacer
             CleanupAndExit();
         }
 
-        public void Quit()
+        public void Quit(bool shouldSaveState = false)
         {
+            if (shouldSaveState)
+            {
+                SaveState();
+            }
             var response = new LauncherResponse()
             {
                 Action = LauncherAction.Quit,
@@ -251,7 +255,7 @@ namespace workspacer
             File.WriteAllText(filePath, json);
         }
 
-        public WorkspacerState LoadState()
+        public WorkspacerState LoadState(bool shouldDelete = true)
         {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "workspacer.State.json");
 
@@ -259,7 +263,11 @@ namespace workspacer
             {
                 var json = File.ReadAllText(filePath);
                 var state = JsonConvert.DeserializeObject<WorkspacerState>(json);
-                File.Delete(filePath);
+                if (shouldDelete)
+                {
+                    File.Delete(filePath);
+                }
+
                 return state;
             }
             else
