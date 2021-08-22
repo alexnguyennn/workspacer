@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace workspacer
@@ -34,7 +35,8 @@ namespace workspacer
         private System.Timers.Timer _timer;
         private PipeServer _pipeServer;
         private Func<ILayoutEngine[]> _defaultLayouts;
-        private List<Func<ILayoutEngine, ILayoutEngine>> _layoutProxies;
+        // private List<Func<ILayoutEngine, ILayoutEngine>> _layoutProxies;
+        private Dictionary<string, Func<ILayoutEngine, ILayoutEngine>> _layoutProxies;
 
         public ConfigContext()
         {
@@ -49,7 +51,8 @@ namespace workspacer
                 new TallLayoutEngine(),
                 new FullLayoutEngine()
             };
-            _layoutProxies = new List<Func<ILayoutEngine, ILayoutEngine>>();
+            // _layoutProxies = new List<Func<ILayoutEngine, ILayoutEngine>>();
+            _layoutProxies = new Dictionary<string, Func<ILayoutEngine, ILayoutEngine>>();
 
             SystemEvents.DisplaySettingsChanged += HandleDisplaySettingsChanged;
 
@@ -117,14 +120,14 @@ namespace workspacer
 
         public void AddLayoutProxy(Func<ILayoutEngine, ILayoutEngine> proxy)
         {
-            _layoutProxies.Add(proxy);
+            _layoutProxies[proxy.Method.Name] = proxy;
         }
 
         public IEnumerable<ILayoutEngine> ProxyLayouts(IEnumerable<ILayoutEngine> layouts)
         {
-            for (var i = 0; i < _layoutProxies.Count; i++)
+            for (var i = 0; i < _layoutProxies.Values.Count; i++)
             {
-                layouts = layouts.Select(layout => _layoutProxies[i](layout)).ToArray();
+                layouts = layouts.Select(layout => _layoutProxies.Values.ToArray()[i](layout)).ToArray();
             }
             return layouts;
         }

@@ -12,20 +12,27 @@ namespace workspacer
     {
         private static Logger Logger = Logger.Create();
         private List<Type> _availablePlugins;
-        private List<IPlugin> _plugins;
+        // private List<IPlugin> _plugins;
+        private Dictionary<string, IPlugin> _plugins;
 
         public PluginManager()
         {
             _availablePlugins = GetAvailablePlugins();
-            _plugins = new List<IPlugin>();
+            _plugins = new Dictionary<string, IPlugin>();
         }
 
-        public void AfterConfig(IConfigContext context) { _plugins.ForEach(p => p.AfterConfig(context)); }
+        public void AfterConfig(IConfigContext context)
+        {
+            foreach (var plugin in _plugins.Values)
+            {
+                plugin.AfterConfig(context);
+            }
+        }
 
         public T RegisterPlugin<T>(T plugin) where T : IPlugin
         {
             Logger.Info("RegisterPlugin[{0}]", plugin.GetType().Name);
-            _plugins.Add(plugin);
+            _plugins[plugin.GetType().ToString()] = plugin;
             return plugin;
         }
 
