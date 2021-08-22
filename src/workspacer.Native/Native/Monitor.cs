@@ -15,6 +15,8 @@ namespace workspacer
         public int Height => Screen.WorkingArea.Height;
         public int X => Screen.WorkingArea.X;
         public int Y => Screen.WorkingArea.Y;
+        public (uint X, uint Y) Dpi { get; set; }
+        public (uint X, uint Y) MainDpi { get; set; }
 
         public Screen Screen { get; }
 

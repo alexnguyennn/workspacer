@@ -14,5 +14,8 @@ namespace workspacer
         int Height { get; }
         int X { get; }
         int Y { get; }
+
+        (uint X, uint Y) Dpi { get; set; }
+        (uint X, uint Y) MainDpi { get; set; }
     }
 }

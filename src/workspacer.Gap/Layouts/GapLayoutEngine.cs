@@ -22,11 +22,11 @@ namespace workspacer.Gap
             _delta = delta;
         }
 
-        public IEnumerable<IWindowLocation> CalcLayout(IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight)
+        public IEnumerable<IWindowLocation> CalcLayout(IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight, IMonitor monitor)
         {
             var doubleOuter = _outerGap * 2;
             var halfInner = _innerGap / 2;
-            return _inner.CalcLayout(windows, spaceWidth - doubleOuter, spaceHeight - doubleOuter).Select(l =>
+            return _inner.CalcLayout(windows, spaceWidth - doubleOuter, spaceHeight - doubleOuter, monitor).Select(l =>
                 new WindowLocation(l.X + _outerGap + halfInner, l.Y + _outerGap + halfInner, l.Width - _innerGap, l.Height - _innerGap, l.State)
             );
         }

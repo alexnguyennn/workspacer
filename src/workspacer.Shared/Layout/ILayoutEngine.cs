@@ -23,8 +23,14 @@ namespace workspacer
         /// <param name="windows">set of windows to be organized</param>
         /// <param name="spaceWidth">width of the available space for layout</param>
         /// <param name="spaceHeight">height of the available space for layout</param>
+        /// <param name="monitor"></param>
         /// <returns>desired locations for each of the specified windows</returns>
-        IEnumerable<IWindowLocation> CalcLayout(IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight);
+        IEnumerable<IWindowLocation> CalcLayout(
+            IEnumerable<IWindow> windows,
+            int spaceWidth,
+            int spaceHeight,
+            IMonitor monitor
+            );
 
         /// <summary>
         /// shrink the primary area of the layout engine.

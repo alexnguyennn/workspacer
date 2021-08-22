@@ -1,0 +1,7 @@
+GetDpiForMonitor
+MulDiv
+EnumDisplayMonitors
+GetMonitorInfoA
+GetMonitorInfo
+GetMonitorInfoW
+MONITORINFO

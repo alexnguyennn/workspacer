@@ -16,5 +16,7 @@ namespace workspacer
         IMonitor GetMonitorAtRect(int x, int y, int width, int height);
         IMonitor GetPreviousMonitor();
         IMonitor GetNextMonitor();
+
+        int ScaleCoordinates(int size, int numerator, int divisor);
     }
 }

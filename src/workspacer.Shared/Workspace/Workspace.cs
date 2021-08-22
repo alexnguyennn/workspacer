@@ -390,7 +390,7 @@ namespace workspacer
             var monitor = _context.WorkspaceContainer.GetCurrentMonitorForWorkspace(this);
             if (monitor != null)
             {
-                return GetLayoutEngine().CalcLayout(windows, monitor.Width, monitor.Height);
+                return GetLayoutEngine().CalcLayout(windows, monitor.Width, monitor.Height, monitor);
             }
             return null;
         }
@@ -405,7 +405,7 @@ namespace workspacer
                 {
                     windows.ForEach(w => w.ShowInCurrentState());
 
-                    var locations = GetLayoutEngine().CalcLayout(windows, monitor.Width, monitor.Height)
+                    var locations = GetLayoutEngine().CalcLayout(windows, monitor.Width, monitor.Height, monitor)
                         .ToArray();
 
                     using (var handle = _context.Windows.DeferWindowsPos(windows.Count, _context.WindowRouter.GetFocusStealingWindows(windows)))

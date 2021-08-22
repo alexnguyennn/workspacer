@@ -31,7 +31,7 @@ namespace workspacer
         public string Name => "dwindle";
 
 
-        public IEnumerable<IWindowLocation> CalcLayout(IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight)
+        public IEnumerable<IWindowLocation> CalcLayout(IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight, IMonitor monitor)
         {
             var list = new List<IWindowLocation>();
             var numWindows = windows.Count();
