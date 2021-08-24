@@ -22,20 +22,59 @@ namespace workspacer.Gap
             _delta = delta;
         }
 
-        public IEnumerable<IWindowLocation> CalcLayout(IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight, IMonitor monitor)
+        public IEnumerable<IWindowLocation> CalcLayout(
+            IEnumerable<IWindow> windows, int spaceWidth, int spaceHeight, IMonitor monitor)
         {
-            var doubleOuter = _outerGap * 2;
-            var halfInner = _innerGap / 2;
-            return _inner.CalcLayout(windows, spaceWidth - doubleOuter, spaceHeight - doubleOuter, monitor).Select(l =>
-                new WindowLocation(l.X + _outerGap + halfInner, l.Y + _outerGap + halfInner, l.Width - _innerGap, l.Height - _innerGap, l.State)
+            // TODO: fix properly
+            // TODO: pass in dpi with expand/shrink methods
+            var doubleOuter = ScaleSize(_outerGap * 2, monitor);
+            var halfInner = ScaleSize(_innerGap / 2, monitor);
+            return _inner
+                .CalcLayout(windows, spaceWidth - doubleOuter, spaceHeight - doubleOuter, monitor)
+                .Select(l => new WindowLocation(
+                    l.X + ScaleSize(_outerGap, monitor) + halfInner,
+                    l.Y + ScaleSize(_outerGap, monitor) + halfInner,
+                    l.Width - ScaleSize(_innerGap, monitor),
+                    l.Height - ScaleSize(_innerGap, monitor),
+                    l.State)
             );
         }
 
-        public void ShrinkPrimaryArea() { _inner.ShrinkPrimaryArea(); }
-        public void ExpandPrimaryArea() { _inner.ExpandPrimaryArea(); }
-        public void ResetPrimaryArea() { _inner.ResetPrimaryArea(); }
-        public void IncrementNumInPrimary() { _inner.IncrementNumInPrimary(); }
-        public void DecrementNumInPrimary() { _inner.DecrementNumInPrimary(); }
+        private int ScaleSize(int size, IMonitor monitor)
+        {
+            return ScaleSize(size, monitor.Dpi.X, monitor.MainDpi.X);
+        }
+
+        private int ScaleSize(int size, uint currentDpi, uint primaryDpi)
+        {
+            // reimplement muldiv to reduce pinvokes required? or move to scale method to win32 lib and call it
+            return (int)Math.Floor((double)size * currentDpi / primaryDpi);
+        }
+
+        public void ShrinkPrimaryArea()
+        {
+            _inner.ShrinkPrimaryArea();
+        }
+
+        public void ExpandPrimaryArea()
+        {
+            _inner.ExpandPrimaryArea();
+        }
+
+        public void ResetPrimaryArea()
+        {
+            _inner.ResetPrimaryArea();
+        }
+
+        public void IncrementNumInPrimary()
+        {
+            _inner.IncrementNumInPrimary();
+        }
+
+        public void DecrementNumInPrimary()
+        {
+            _inner.DecrementNumInPrimary();
+        }
 
         public void IncrementInnerGap()
         {
