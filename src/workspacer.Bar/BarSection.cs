@@ -105,7 +105,7 @@ namespace workspacer.Bar
                 {
                     var widget = widgets[i];
                     var parts = widget.GetParts();
-                    var partSize = maxSize / parts.Length;
+                    var partSize = maxSize / (parts.Length > 0 ? parts.Length : 1);
                     for (var j = 0; j < parts.Length; j++)
                     {
                         var part = parts[j];
