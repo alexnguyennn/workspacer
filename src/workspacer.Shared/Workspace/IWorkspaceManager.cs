@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace workspacer
+﻿namespace workspacer
 {
     public delegate void WorkspaceUpdatedDelegate();
     public delegate void FocusedMonitorUpdatedDelegate();
@@ -29,6 +23,7 @@ namespace workspacer
         void SwitchFocusToPreviousMonitor();
         void SwitchFocusedMonitorToMouseLocation();
         void MoveFocusedWindowToWorkspace(int index);
+        void MoveFocusedWindowToWorkspace(IWorkspace workspace);
         void MoveFocusedWindowAndSwitchToNextWorkspace();
         void MoveFocusedWindowAndSwitchToPreviousWorkspace();
         void MoveFocusedWindowToMonitor(int index);

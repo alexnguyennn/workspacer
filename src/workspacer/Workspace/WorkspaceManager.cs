@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace workspacer
@@ -208,9 +203,13 @@ namespace workspacer
         public void MoveFocusedWindowToWorkspace(int index)
         {
             Logger.Debug("MoveFocusedWindowToWorkspace({0})", index);
-            var window = FocusedWorkspace.FocusedWindow;
             var targetWorkspace = _context.WorkspaceContainer.GetWorkspaceAtIndex(FocusedWorkspace, index);
+            MoveFocusedWindowToWorkspace(targetWorkspace);
+        }
 
+        public void MoveFocusedWindowToWorkspace(IWorkspace targetWorkspace)
+        {
+            var window = FocusedWorkspace.FocusedWindow;
             if (window != null && targetWorkspace != null)
             {
                 var windows = FocusedWorkspace.ManagedWindows;
@@ -231,6 +230,7 @@ namespace workspacer
                 nextWindow?.Focus();
             }
         }
+
         public void MoveFocusedWindowAndSwitchToNextWorkspace()
         {
             Logger.Debug("MoveFocusedWindowAndSwitchToNextWorkspace()");
