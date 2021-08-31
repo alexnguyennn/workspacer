@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -570,13 +571,14 @@ namespace workspacer
                 }
             }
 
+            var allEnumeratedWindows = allWindows.ToList();
             for (var i = 0; i < wtw.Count; i++)
             {
                 var workspaceWindows = wtw[i];
                 for (var j = 0; j < wtw[i].Count; j++)
                 {
                     var handle = workspaceWindows[j];
-                    var window = allWindows.FirstOrDefault(w => (int)w.Handle == handle);
+                    var window = allEnumeratedWindows.FirstOrDefault(w => (int)w.Handle == handle);
 
                     if (window == null)
                         continue;
@@ -603,6 +605,11 @@ namespace workspacer
                     }
                 }
             }
+
+            List<int> existingHandles = state.WorkspacesToWindows.SelectMany(handleInts => handleInts).ToList();
+            var newHandles = allEnumeratedWindows
+                .Where(w => !existingHandles.Contains((int)w.Handle));
+            SetLocationForWindows(newHandles);
         }
 
         public void Initialize(IEnumerable<IWindow> windows)
@@ -615,9 +622,13 @@ namespace workspacer
                 _context.WorkspaceContainer.AssignWorkspaceToMonitor(w, m);
             }
 
+            SetLocationForWindows(windows);
+        }
+
+        private void SetLocationForWindows(IEnumerable<IWindow> windows)
+        {
             foreach (var w in windows)
             {
-                var location = w.Location;
                 var locationWorkspace = GetWorkspaceForWindowLocation(w);
                 var destWorkspace = _context.WindowRouter.RouteWindow(w, locationWorkspace);
 
