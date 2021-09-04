@@ -34,8 +34,8 @@ namespace workspacer.Bar.Widgets
                 // TODO: extract logic into own plugin
                 // TODO: position is not correct in non-full screen layout engines, implement mouse move on window focus too (but for specific layouts)
                 // TODO: use activelayout widget as inspiration -> config layout; focus logic
-                var monitor = Context.MonitorContainer.FocusedMonitor;
-                Cursor.Position =  new Point(monitor.X + (monitor.Width / 2), monitor.Y + (monitor.Height / 2));
+                // var monitor = Context.MonitorContainer.FocusedMonitor;
+                // Cursor.Position =  new Point(monitor.X + (monitor.Width / 2), monitor.Y + (monitor.Height / 2));
             };
         }
     }

@@ -452,6 +452,8 @@ namespace workspacer
                         TrySwapWindowToMouse(window);
                     }
                     _windowsToWorkspaces[window].UpdateWindow(window, type);
+                    // Cursor.Position =  new Point(monitor.X + (monitor.Width / 2), monitor.Y + (monitor.Height / 2));
+                    // Cursor.Position =  new Point(window.Location.X + (window.Location.Width / 2), window.Location.Y + (window.Location.Height / 2));
                     WindowUpdated?.Invoke(window, workspace);
                 }
             }

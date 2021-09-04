@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace workspacer.Bar.Widgets
 {
@@ -131,6 +133,8 @@ namespace workspacer.Bar.Widgets
             {
                 Context.MarkDirty();
             }
+            // TODO: move this into better location
+            Cursor.Position =  new Point(window.Location.X + (window.Location.Width / 2), window.Location.Y + (window.Location.Height / 2));
         }
 
         private void RefreshFocusedMonitor()
