@@ -45,6 +45,11 @@ namespace workspacer
             _timer.Interval = 5000;
             _timer.Enabled = true;
 
+            var otherTimer = new System.Timers.Timer();
+            otherTimer.Elapsed += (s, e) => SaveState();
+            otherTimer.Interval = 600000; // save state every 10 minutes
+            otherTimer.Enabled = true;
+
             _pipeServer = new PipeServer();
 
             _defaultLayouts = () => new ILayoutEngine[] {
