@@ -57,6 +57,8 @@ namespace workspacer
 
             Win32.EnumWindows((handle, param) =>
             {
+                // Logger.Info($"***** got window handle: {handle} *******");
+
                 if (Win32Helper.IsAppWindow(handle))
                 {
                     RegisterWindow(handle, false);

@@ -23,5 +23,11 @@ namespace workspacer.ActionMenu
 
         public Color Background { get; set; } = Color.Black;
         public Color Foreground { get; set; } = Color.White;
+
+        /// <summary>
+        /// Provides a delegate to run after all configuration is loaded into workspacer.
+        /// Useful to set extra Action Menu keybindings beyond the default one provided.
+        /// </summary>
+        public Action<ActionMenuPlugin> AfterConfigDelegate = null;
     }
 }

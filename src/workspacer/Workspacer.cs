@@ -62,6 +62,8 @@ namespace workspacer
                 throw new Exception("you must specify at least enough workspaces to cover all monitors");
             }
 
+            // Logger.Info($"***** windows are: {_context.Windows.Windows.Aggregate("", (accum, w) => accum + w + Environment.NewLine)} *******");
+
             // init workspaces
             var state = _context.LoadState(shouldDelete: false);
             if (state != null)

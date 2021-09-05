@@ -427,6 +427,7 @@ namespace workspacer
                 }
                 else
                 {
+
                     var focusStealers = _context.WindowRouter.GetFocusStealingWindows(windows);
                     windows.Where(w => !focusStealers.Contains(w)).Select(w =>
                     {
@@ -434,8 +435,8 @@ namespace workspacer
                         return w;
                     }).ToList();
 
-
                     windows.Where(w => focusStealers.Contains(w)).Select(w =>
+                    // windows.Select(w =>
                     {
                         w.ShowMinimized();
                         return w;

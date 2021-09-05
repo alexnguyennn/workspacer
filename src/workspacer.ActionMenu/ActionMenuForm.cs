@@ -45,7 +45,9 @@ namespace workspacer.ActionMenu
             this.Text = config.MenuTitle;
             this.Width = config.MenuWidth;
             this.MinimumSize = new Size(config.MenuWidth, config.MenuHeight);
+            // TODO: get rid of magic number
             this.MaximumSize = new Size(config.MenuWidth, 100000);
+            // this.MaximumSize = new Size(_context.MonitorContainer.FocusedMonitor.Width, _context.MonitorContainer.FocusedMonitor.Height);
             this.AutoSize = true;
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
@@ -56,9 +58,12 @@ namespace workspacer.ActionMenu
             this.textBox.ForeColor = ColorToColor(config.Foreground);
             this.listBox.BackColor = ColorToColor(config.Background);
             this.listBox.ForeColor = ColorToColor(config.Foreground);
+            // TODO: get rid of magic number
+            this.listBox.MaximumSize = new Size(config.MenuWidth, 100000);
 
             this.textBox.AutoSize = true;
             this.listBox.AutoSize = true;
+
             this.listBox.IntegralHeight = true;
 
             this.label.Font = new Font(config.FontName, config.FontSize, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
@@ -128,7 +133,9 @@ namespace workspacer.ActionMenu
         {
             var monitor = _context.MonitorContainer.FocusedMonitor;
             var width = this.ClientRectangle.Width;
-            this.Location = new Point(monitor.X + (monitor.Width / 2) - (width / 2), 0);
+            // this.Location = new Point(Scale(monitor.X) + Scale(monitor.Width / 2) - Scale(width / 2), 0);
+            // this.Location = new Point(monitor.X, 0);
+            this.Location = new Point(monitor.X + GetDiff(monitor.Width, width), 0);
             this.textBox.Text = "";
 
             this.TopMost = true;
@@ -153,6 +160,7 @@ namespace workspacer.ActionMenu
         {
             if (this.listBox.SelectedIndex < this.listBox.Items.Count - 1)
                 this.listBox.SelectedIndex++;
+            // Logger.Info($"*** current selected text is: {(this.listBox.Items[this.listBox.SelectedIndex] as ActionMenuItem)?.Text}");
         }
 
         private void SelectPrevious()
@@ -222,7 +230,7 @@ namespace workspacer.ActionMenu
         private void FixLayout()
         {
             var width = this.ClientRectangle.Width;
-            this.label.Width = width;
+            this.label.Width = this.textBox.Width;
             this.label.Height = this.textBox.Height;
             this.label.Visible = this.label.Text != "";
 
@@ -235,7 +243,21 @@ namespace workspacer.ActionMenu
             this.textBox.Location = new Point(0, labelHeight);
             this.listBox.Location = new Point(0, this.textBox.Height + labelHeight);
             this.listBox.Visible = this.listBox.Items.Count > 0;
-            this.Location = new Point(monitor.X + (monitor.Width / 2) - (width / 2), monitor.Y);
+            // this.Location = new Point(monitor.X, monitor.Y);
+            this.Location = new Point(monitor.X + GetDiff(monitor.Width, width), monitor.Y);
+            this.listBox.Refresh();
+            this.textBox.Refresh();
+            this.label.Refresh();
+        }
+
+        private int GetDiff(int effectiveMonitorWidth, int effectiveFormWidth)
+        {
+            // Logger.Info($"~~~~ calc diff: half mon length: {effectiveMonitorWidth} half form length: {effectiveFormWidth} ~~~");
+            var monitor = _context.MonitorContainer.FocusedMonitor;
+            // Logger.Info($"~~~~ monitor stats: {monitor.Width}x{monitor.Height} | dpi: {monitor.Dpi.X} ref dpi: {monitor.MainDpi.X}");
+            return effectiveMonitorWidth - effectiveFormWidth > 0
+                ? (effectiveMonitorWidth - effectiveFormWidth) / 2
+                : 0;
         }
 
         private void Cleanup()

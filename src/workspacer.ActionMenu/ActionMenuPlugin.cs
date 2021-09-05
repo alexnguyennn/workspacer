@@ -33,20 +33,27 @@ namespace workspacer.ActionMenu
             {
                 _context.Keybinds.Subscribe(_config.KeybindMod, _config.KeybindKey, () => ShowDefault(), "open action menu");
             }
+
+            if (!(_config.AfterConfigDelegate is null))
+                _config.AfterConfigDelegate(this);
         }
 
         public void ShowMenu(string message, ActionMenuItemBuilder builder)
         {
             _menu.SetItems(message, builder.Get());
             _menu.Show();
-            _menu.Activate();
+            // _menu.Activate();
+            // _menu.Handle
+            // TODO: add toggle for which one to use
+            Win32Helper.ForceForegroundWindow(_menu.Handle);
         }
 
         public void ShowMenu(ActionMenuItemBuilder builder)
         {
             _menu.SetItems("", builder.Get());
             _menu.Show();
-            _menu.Activate();
+            // _menu.Activate();
+            Win32Helper.ForceForegroundWindow(_menu.Handle);
         }
 
         public void ShowFreeForm(string message, Action<string> callback)
@@ -74,7 +81,8 @@ namespace workspacer.ActionMenu
                 .AddMenu("switch to window", () => CreateSwitchToWindowMenu(_context));
         }
 
-        private ActionMenuItemBuilder CreateSwitchToWindowMenu(IConfigContext context)
+        // consider making a similar constructor to ShowDefault and keep this private
+        public ActionMenuItemBuilder CreateSwitchToWindowMenu(IConfigContext context)
         {
             var builder = Create();
             var workspaces = context.WorkspaceContainer.GetAllWorkspaces();
@@ -82,7 +90,10 @@ namespace workspacer.ActionMenu
             {
                 foreach (var window in workspace.ManagedWindows)
                 {
-                    var text = $"[{workspace.Name}] {window.Title}";
+                    // TODO: maybe add setting to configure this? maybe not?
+                    var fullText = $"[{workspace.Name}] {window.Title}";
+                    // var text = fullText.Substring(0, fullText.Length > 100 ? 100 : fullText.Length);
+                    var text = fullText;
                     builder.Add(text, () => context.Workspaces.SwitchToWindow(window));
                 }
             }

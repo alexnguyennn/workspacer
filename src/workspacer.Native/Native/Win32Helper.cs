@@ -25,9 +25,12 @@ namespace workspacer
 
         public static  bool IsAppWindow(IntPtr hwnd)
         {
+             // return (Win32.IsWindowVisible(hwnd) || Win32.IsIconic(hwnd)) &&
+            // return
             return Win32.IsWindowVisible(hwnd) &&
-                   !Win32.GetWindowExStyleLongPtr(hwnd).HasFlag(Win32.WS_EX.WS_EX_NOACTIVATE) &&
-                   !Win32.GetWindowStyleLongPtr(hwnd).HasFlag(Win32.WS.WS_CHILD);
+	            !Win32.GetWindowExStyleLongPtr(hwnd).HasFlag(Win32.WS_EX.WS_EX_NOACTIVATE) &&
+	            !Win32.GetWindowStyleLongPtr(hwnd).HasFlag(Win32.WS.WS_CHILD);
+                   // && !Win32.GetWindowStyleLongPtr(hwnd).HasFlag(Win32.WS.WS_POPUP);
         }
 
         // http://blogs.msdn.com/b/oldnewthing/archive/2007/10/08/5351207.aspx
