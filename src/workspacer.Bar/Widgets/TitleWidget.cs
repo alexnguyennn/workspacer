@@ -32,7 +32,11 @@ namespace workspacer.Bar.Widgets
 
             return (window != null)
                 ? Parts(GetWindowTitles(color))
-                : Parts(Part(NoWindowMessage, color, fontname: FontName));
+                : Parts(Part(
+                    text: NoWindowMessage,
+                    fore: color,
+                    back: isFocusedMonitor ? Color.Teal : Color.Black, // TODO: move to config
+                    fontname: FontName));
         }
 
         public override void Initialize()
@@ -48,6 +52,8 @@ namespace workspacer.Bar.Widgets
         private IWindow GetWindow()
         {
             var currentWorkspace = Context.WorkspaceContainer.GetWorkspaceForMonitor(Context.Monitor);
+            if (!currentWorkspace.ManagedWindows.Any()) return null;
+
             return currentWorkspace.FocusedWindow ??
                 currentWorkspace.LastFocusedWindow ??
                 currentWorkspace.ManagedWindows.FirstOrDefault();
