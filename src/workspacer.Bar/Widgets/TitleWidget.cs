@@ -42,6 +42,7 @@ namespace workspacer.Bar.Widgets
             Context.Workspaces.WindowUpdated += RefreshUpdated;
             Context.Workspaces.FocusedMonitorUpdated += RefreshFocusedMonitor;
             Context.Workspaces.WorkspaceUpdated += RefreshFocusedMonitor;
+            Context.Workspaces.WindowMoved += RefreshWindowMoved;
         }
 
         private IWindow GetWindow()
@@ -135,6 +136,11 @@ namespace workspacer.Bar.Widgets
             }
             // TODO: move this into better location
             Cursor.Position =  new Point(window.Location.X + (window.Location.Width / 2), window.Location.Y + (window.Location.Height / 2));
+        }
+
+        private void RefreshWindowMoved(IWindow window, IWorkspace oldworkspace, IWorkspace newworkspace)
+        {
+            Context.MarkDirty();
         }
 
         private void RefreshFocusedMonitor()
