@@ -135,11 +135,9 @@ namespace workspacer.Bar.Widgets
 
         private void RefreshUpdated(IWindow window, IWorkspace workspace)
         {
-            var currentWorkspace = Context.WorkspaceContainer.GetWorkspaceForMonitor(Context.Monitor);
-            if (workspace == currentWorkspace && window == GetWindow())
-            {
-                Context.MarkDirty();
-            }
+            // onClick switch callbacks mean that the updated window can be on any workspace now
+            // need to update title of the src bar as well so can't filter out
+            Context.MarkDirty();
             // TODO: move this into better location
             Cursor.Position =  new Point(window.Location.X + (window.Location.Width / 2), window.Location.Y + (window.Location.Height / 2));
         }
