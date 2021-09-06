@@ -166,12 +166,6 @@ namespace workspacer
             }
         }
 
-        public void ForceFocus()
-        {
-            Win32Helper.ForceForegroundWindow(_handle);
-            WindowFocused?.Invoke();
-        }
-
         public void Hide()
         {
             if (CanLayout)

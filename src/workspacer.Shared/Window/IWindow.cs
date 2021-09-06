@@ -29,7 +29,6 @@ namespace workspacer
         bool IsMouseMoving { get; }
 
         void Focus();
-        void ForceFocus();
         void Hide();
         void ShowNormal();
         void ShowMaximized();
