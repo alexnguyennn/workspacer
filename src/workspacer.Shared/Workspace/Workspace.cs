@@ -105,6 +105,11 @@ namespace workspacer
 
                 _windows.Remove(window);
 
+                if (!ManagedWindows.Any())
+                {
+                    _lastFocused = null; // empty workspaces should not have any last focused window
+                }
+
                 if (layout)
                     DoLayout();
             }
