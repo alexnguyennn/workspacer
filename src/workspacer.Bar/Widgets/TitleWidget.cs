@@ -139,7 +139,11 @@ namespace workspacer.Bar.Widgets
             // need to update title of the src bar as well so can't filter out
             Context.MarkDirty();
             // TODO: move this into better location
-            Cursor.Position =  new Point(window.Location.X + (window.Location.Width / 2), window.Location.Y + (window.Location.Height / 2));
+            if (!workspace.IsPointInside(Cursor.Position.X, Cursor.Position.Y))
+            {
+                Cursor.Position =  new Point(window.Location.X + (window.Location.Width / 2), window.Location.Y + (window.Location.Height / 2));
+            }
+
         }
 
         private void RefreshWindowMoved(IWindow window, IWorkspace oldworkspace, IWorkspace newworkspace)
